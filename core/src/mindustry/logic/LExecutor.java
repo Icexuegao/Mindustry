@@ -691,6 +691,7 @@ public class LExecutor{
             if(target instanceof Senseable se){
                 if(sense instanceof Content co){
                     to.setnum(se.sense(co));
+                    return;
                 }else if(sense instanceof LAccess la){
                     Object objOut = se.senseObject(la);
 
@@ -701,6 +702,7 @@ public class LExecutor{
                         //object output
                         to.setobj(objOut);
                     }
+                    return;
                 }
             }else{
                 if(sense == LAccess.size || sense == LAccess.bufferSize){
@@ -712,9 +714,10 @@ public class LExecutor{
                         return;
                     }
                 }
-
-                to.setobj(null);
             }
+
+            //unrecognized or unhandled property
+            to.setobj(null);
         }
     }
 
@@ -1723,10 +1726,9 @@ public class LExecutor{
 
     public static class ApplyEffectI implements LInstruction{
         public boolean clear;
-        public String effect;
-        public LVar unit, duration;
+        public LVar effect, unit, duration;
 
-        public ApplyEffectI(boolean clear, String effect, LVar unit, LVar duration){
+        public ApplyEffectI(boolean clear, LVar effect, LVar unit, LVar duration){
             this.clear = clear;
             this.effect = effect;
             this.unit = unit;
@@ -1740,11 +1742,11 @@ public class LExecutor{
         public void run(LExecutor exec){
             if(net.client()) return;
 
-            if(unit.obj() instanceof Unit unit && content.statusEffect(effect) != null){
+            if(unit.obj() instanceof Unit unit && effect.obj() instanceof StatusEffect effect){
                 if(clear){
-                    unit.unapply(content.statusEffect(effect));
+                    unit.unapply(effect);
                 }else{
-                    unit.apply(content.statusEffect(effect), duration.numf() * 60f);
+                    unit.apply(effect, duration.numf() * 60f);
                 }
             }
         }
@@ -1782,6 +1784,7 @@ public class LExecutor{
                 case lighting -> state.rules.lighting = value.bool();
                 case canGameOver -> state.rules.canGameOver = value.bool();
                 case pauseDisabled -> state.rules.pauseDisabled = value.bool();
+                case musicVolume -> state.rules.musicVolume = Mathf.clamp(value.numf());
                 case mapArea -> {
                     int x = p1.numi(), y = p2.numi(), w = p3.numi(), h = p4.numi();
                     if(!checkMapArea(x, y, w, h, false)){
