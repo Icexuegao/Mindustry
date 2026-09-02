@@ -260,7 +260,7 @@ public class MapImagesView implements AssetView{
                     b.defaults().size((size - 10f) / 4f);
                     var istyle = Styles.emptyi;
                     b.button(Icon.pencil, istyle, () -> {
-                        ui.showTextInput("@save.rename", "@patch.path", image.path, res -> {
+                        ui.showTextInput("@save.rename", "@patch.path", 1000, image.path, res -> {
                             if(!res.endsWith(".png")) res = res + ".png";
 
                             if(!DataAsset.validPath(res)){
@@ -296,6 +296,7 @@ public class MapImagesView implements AssetView{
                     b.button(Icon.trash, istyle, () -> {
                         ui.showConfirm("@asset.image.delete.confirm", () -> {
                             Core.atlas.getRegionMap().remove(regionPrefix + image.name);
+                            Core.atlas.getDrawables().remove(regionPrefix + image.name);
                             getImages().remove(image);
                             diag.rebuild();
                         });

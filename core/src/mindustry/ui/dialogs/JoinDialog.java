@@ -467,6 +467,7 @@ public class JoinDialog extends BaseDialog{
 
                     boolean needsSort = false;
 
+                    //hub servers are ignored
                     if(!sortPing && !Strings.stripColors(res.name).toLowerCase(Locale.ROOT).contains("hub") && groupTable[0].userObject instanceof Integer count){
                         //hack: apply large numerical offset to favorite servers
                         int actualCount = (count >= favoriteCountOffset ? res.players + favoriteCountOffset : res.players);
@@ -778,11 +779,9 @@ public class JoinDialog extends BaseDialog{
         }else if(host.version == 0){
             return Core.bundle.get("server.outdated");
         }else if(host.version < Version.build && Version.build != -1){
-            return Core.bundle.get("server.outdated") + "\n" +
-            Core.bundle.format("server.version", host.version, host.versionType);
+            return "\n" + Core.bundle.format("server.version", host.version, host.versionType) + " " + Core.bundle.get("server.outdated");
         }else if(host.version > Version.build && Version.build != -1){
-            return Core.bundle.get("server.outdated.client") + "\n" +
-            Core.bundle.format("server.version", host.version, host.versionType);
+            return "\n" + Core.bundle.format("server.version", host.version, host.versionType) + " " + Core.bundle.get("server.outdated.client");
         }else if(host.version == Version.build && Version.type.equals(host.versionType)){
             //not important
             return "";
