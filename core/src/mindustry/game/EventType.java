@@ -14,7 +14,7 @@ import mindustry.ui.builder.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.storage.CoreBlock.*;
-import mindustry.world.meta.Stats;
+import mindustry.world.meta.*;
 
 public class EventType{
 
